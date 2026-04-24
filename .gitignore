@@ -1,0 +1,16 @@
+# Build output
+ircserv
+ircserv.bonus
+obj/
+obj_bonus/
+
+# Editor / OS
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Runtime logs (if tests ever drop logs next to sources)
+*.log
