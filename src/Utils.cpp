@@ -95,7 +95,7 @@ bool isValidChannelName(const std::string& n) {
 
 std::string intToStr(long n) {
     char buf[32];
-    std::sprintf(buf, "%ld", n);
+    std::snprintf(buf, sizeof(buf), "%ld", n);
     return std::string(buf);
 }
 
