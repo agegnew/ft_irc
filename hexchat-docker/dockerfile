@@ -1,0 +1,55 @@
+FROM ubuntu:22.04
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt update && apt install -y \
+    git \
+    build-essential \
+    meson \
+    ninja-build \
+    python3 \
+    gettext \
+    pkg-config \
+    ca-certificates \
+    dbus-x11 \
+    gtk2-engines-pixbuf \
+    libgtk2.0-dev \
+    libglib2.0-dev \
+    libnotify-dev \
+    libcanberra-dev \
+    libcanberra-gtk-module \
+    libdbus-glib-1-dev \
+    libssl-dev \
+    libluajit-5.1-dev \
+    lua5.1 \
+    iso-codes \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN git clone https://github.com/hexchat/hexchat.git /opt/hexchat
+
+WORKDIR /opt/hexchat
+
+RUN meson setup build \
+    -Dwith-perl=false \
+    -Dwith-python=false
+
+RUN meson compile -C build
+
+RUN mkdir -p /root/.config/hexchat
+
+RUN cat > /root/.config/hexchat/servlist.conf <<'EOF'
+v=2.14.0
+
+N=LocalIRC
+I=root
+i=root_
+U=root
+R=root
+P=pass
+E=UTF-8 (Unicode)
+F=0
+D=0
+S=10.13.3.8/6553
+EOF
+
+CMD ["dbus-run-session", "--", "./build/src/fe-gtk/hexchat"]
